@@ -34,7 +34,7 @@ export const registerUser = async (req, res) => {
 			occupation,
 		})
 
-		res.json("User Created Successfully.")
+		res.json({ success: true, message:  "User Created Successfully."  })
 	} catch (error) {
 		res.status(500).json({ error: error.message })
 	}
