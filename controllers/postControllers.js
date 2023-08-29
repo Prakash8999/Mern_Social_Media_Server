@@ -3,16 +3,16 @@ import { User } from "../model/userModel.js";
 
 export const createPost = async (req, res) => {
 	try {
-		const { userId, description, postImage, firstName, lastName,location,profilePicture } = req.body
-		const user = User.findById({userId})
+		const { userId, description, postImage, firstName, lastName, location, profilePicture } = req.body
+		const user = User.findById({ userId })
 		const createPost = new Post({
 
 			userId,
-			firstName:firstName,
+			firstName: firstName,
 			lastName: lastName,
 			location: location,
 			description,
-			profilePicture:profilePicture,
+			profilePicture: profilePicture,
 			postImage,
 			likes: {},
 			comments: []
@@ -29,7 +29,7 @@ export const createPost = async (req, res) => {
 
 export const readPost = async (req, res) => {
 	try {
-		const post = await Post.find().sort({createdAt: -1})
+		const post = await Post.find().sort({ createdAt: -1 })
 		res.status(200).json(post)
 	} catch (error) {
 		res.status(500).json({ error: error.message })
@@ -40,7 +40,7 @@ export const readUserPost = async (req, res) => {
 	try {
 		const { userId } = req.params;
 
-		const post = await Post.find({userId})
+		const post = await Post.find({ userId }).sort({createdAt: -1})
 		res.status(200).json(post)
 	} catch (error) {
 		res.status(500).json({ error: error.message })
@@ -73,3 +73,25 @@ export const likePost = async (req, res) => {
 		res.status(404).json({ success: false, message: error.message })
 	}
 }
+
+
+export const updatePost = async (req, res) => {
+
+
+	try {
+		const { postImage, id, description } = req.body
+		const updatepost =await Post.findById(id)
+		if (!updatepost) {
+			return res.status(404).json({ success: false, message: "Post not found" })
+		}
+		await updatepost.updateOne({postImage,description})
+		res.status(200).json({success:true, message:"Post Updated Successfully", updatepost})
+
+	} catch (error) {
+		res.status(404).json({ success: false, message: error.message })
+	}
+
+
+}
+
+
